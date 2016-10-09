@@ -1,0 +1,8 @@
+  X, n, m=arrays(group) # find the X matrix for each data set, n is the length of dataset, m is the variables number (degree of freedom)
+    y=group['RET_rf'].reshape((n,1))
+    linear = linear_model.LinearRegression()
+    linear.fit(X, y , n_jobs=-1)
+    s=np.sum((linear.predict(X) - y) ** 2)/(n-(m-1)-1) ### sum square
+    sd_alpha=np.sqrt(s*(np.diag(np.linalg.pinv(np.dot(X.T,X))))) # standard deviation, square root of the diagonal of variance-co-variance matrix (sigular vector decomposition)
+    t_stat_alpha=linear.intercept_[0]/sd_alpha[0] #(t-statistics)
+    return name[0], name[1], linear.intercept_[0], sd_alpha[0], t_stat_alpha
